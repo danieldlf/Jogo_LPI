@@ -27,6 +27,7 @@ void gotoxy(int x, int y)
 }
 
 int i, j;
+char bloco = '-';
 
 int init(int lines){
     system("cls");
@@ -56,20 +57,20 @@ void jogar(){
     init(LIMITEVERT);
     gotoxy(0, LIMITEVERT);
     for(i=0; i<LIMITE; i++){
-        printf("▬");
+        printf("%c", bloco);
     }
-    fflush(stdin);
+    fflush(stdout);
     gotoxy (1, LIMITEVERT - 4);
     for(i=0; i<LIMITE; i++){
-        printf("▬");
+        printf("%c", bloco);
     }
-    fflush(stdin);
+    fflush(stdout);
     gotoxy ((LIMITE/2) - 5, 0);
     printf("Pontos:");
-    fflush(stdin);
+    fflush(stdout);
     gotoxy ((LIMITE/2) - 5, LIMITEVERT - 3);
     printf("Vidas:");
-    fflush(stdin);
+    fflush(stdout);
     getchar();
 
     struct traj {
@@ -91,9 +92,13 @@ void jogar(){
 
     float pontuacaoJogador = 0.0;
     float coefAng = 0;
-    int intervalo = 5;
+    float intervalo = 5;
     float posicaoCanhao = LIMITEVERT/2;
     int numeroVidasJogador = 0;
+    /**/
+    int size = (sizeof prqn / sizeof *prqn);
+    int size2 = (sizeof pssr / sizeof *pssr);
+    /**/
 
     if (dif == 1){
         numeroVidasJogador = 5;
@@ -110,12 +115,13 @@ void jogar(){
     printf("%d", numeroVidasJogador);
 
     while(true){
-        if((rand()%15)%sizeof(prqn) == 0 && intervalo < 0){ // nao sei se strlen funciona aq
+        if(((rand()%15)%sizeof(prqn) == 0) && (intervalo < 0)){ // nao sei se strlen funciona aq
             intervalo = sizeof(prqn) + rand()%10; // strlen, msm coisa aq
             //int j = 0; ja declarei j
             for(i=0; i<4; i++){
                 if(!prqn[i].ativo){
                     prqn[i].ativo = true;
+                    prqn[i].img = '@';
                     prqn[i].x = 25 + rand()%70;
                     prqn[i].y = 5 + rand()%15;
                     break;
@@ -143,29 +149,29 @@ void jogar(){
 
         //apagar o canhao
         gotoxy(1, posicaoCanhao+1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(2, posicaoCanhao+1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(3, posicaoCanhao+1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(4, posicaoCanhao+1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(1, posicaoCanhao);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(2, posicaoCanhao);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(3, posicaoCanhao);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(4, posicaoCanhao);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(1, posicaoCanhao-1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(2, posicaoCanhao-1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(3, posicaoCanhao-1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
         gotoxy(4, posicaoCanhao-1);
-        printf("  ", fflush(stdin));
+        printf("  ", fflush(stdout));
 
         if(kbhit()){
             char c = getch(); // aqui ele usou hitKey
@@ -175,6 +181,7 @@ void jogar(){
                 for(i=0; i<2; i++){
                     if(!pssr[i].ativo){
                         pssr[i].ativo = true;
+                        pssr[i].img = '@';
                         pssr[i].x = 5;
                         pssr[i].y = posicaoCanhao;
                         pssr[i].traj1.C = pssr[i].y;
@@ -185,35 +192,35 @@ void jogar(){
                 }
             }
             else if((c == 'q') || (c == 'Q')){
-                coefAng = (coefAng+1/50);
+                coefAng = (float)(coefAng+(0.02));
                 gotoxy(10, LIMITEVERT - 3);
                 printf("                        ");
                 gotoxy(10, LIMITEVERT - 3);
                 printf("Angulo = %.2f", coefAng);
-                fflush(stdin);
-                if(coefAng>60/50){
+                fflush(stdout);
+                if(coefAng>(1.2)){
                     coefAng = 0;
                     gotoxy(10, LIMITEVERT - 3);
                     printf("                        ");
                     gotoxy(10, LIMITEVERT - 3);
                     printf("Angulo = %.2f", coefAng);
-                    fflush(stdin);
+                    fflush(stdout);
                 }
             }
             else if((c == 'a') || (c == 'A')){
-                coefAng = (coefAng-1/50);
+                coefAng = (float)(coefAng-(0.02));
                 gotoxy(10, LIMITEVERT - 3);
                 printf("                        ");
                 gotoxy(10, LIMITEVERT - 3);
                 printf("Angulo = %.2f", coefAng);
-                fflush(stdin);
-                if(coefAng <= -36/50){
+                fflush(stdout);
+                if(coefAng <= -(0.72)){
                     coefAng = 0;
                     gotoxy(10, LIMITEVERT - 3);
                     printf("                        ");
                     gotoxy(10, LIMITEVERT - 3);
                     printf("Angulo = %.2f", coefAng);
-                    fflush(stdin);
+                    fflush(stdout);
                 }
             }
             else if((c == 'w') || (c == 'W')){
@@ -241,7 +248,7 @@ void jogar(){
                     pssr[i].ativo = false;
                     numeroVidasJogador -= 1;
                     gotoxy(LIMITE/2 + 1, LIMITEVERT - 3);
-                    printf("%.1f", numeroVidasJogador);
+                    printf("%d", numeroVidasJogador);
                 }
                 else{
                     gotoxy(pssr[i].x, pssr[i].y);
@@ -256,318 +263,318 @@ void jogar(){
         }
         if(coefAng == 0){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco); // mudar esse negocio
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng > 0 && coefAng < 10/50){
+        else if(coefAng > 0 && coefAng < (0.2)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("'");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng >= 10/50 && coefAng <= 20/50){
+        else if(coefAng >= (0.2) && coefAng <= (0.4)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("'");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng > 20/50 && coefAng <= 30/50){
+        else if(coefAng > (0.4) && coefAng <= (0.6)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("'");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("'");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng > 30/50){
+        else if(coefAng > (0.6)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("/");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng < 0 && coefAng >= -10/50){
+        else if(coefAng < 0 && coefAng >= -(0.2)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng < -10/50 && coefAng >= -20/50){
+        else if(coefAng < -(0.2) && coefAng >= -(0.4)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng < -20/50 && coefAng >= -30/50){
+        else if(coefAng < -(0.4) && coefAng >= -(0.6)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("-");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
-        else if(coefAng < -30/50){
+        else if(coefAng < -(0.6)){
             gotoxy(1, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao+1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao);
             printf("\ ");
-            fflush(stdin);
+            fflush(stdout);
             gotoxy(1, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(2, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(3, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
             gotoxy(4, posicaoCanhao-1);
-            printf("▄");
-            fflush(stdin);
+            printf("%c", bloco);
+            fflush(stdout);
         }
         bool acertou = 0; // false
         for(i=0; i<4; i++){
@@ -597,7 +604,7 @@ void jogar(){
             printf("GAME OVER!");
             break;
         }
-        sleep(0.08);
+        sleep(0.9);
         intervalo -= 1;
     }
     getchar(); // pause()
@@ -640,7 +647,7 @@ int main()
             printf("Aperte W para subir a posicao do canhao.\n");
             printf("Aperte S para descer a posicao do canhao.\n");
             printf("Aperte ESPACO para atirar\n");
-            getchar(); // pause()
+            getch(); // pause()
         }
         else{
             printf("Bye bye!");
