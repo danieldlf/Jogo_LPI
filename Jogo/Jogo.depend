@@ -1,0 +1,45 @@
+# depslib dependency file v1.0
+1654476835 source:c:\users\danie\desktop\upe\2° período\lpi\c\jogo\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<conio.h>
+	<time.h>
+	<ctype.h>
+	<unistd.h>
+	<windows.h>
+	"jogar.h"
+
+1654480269 c:\users\danie\desktop\upe\2° período\lpi\c\jogo\jogar.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<conio.h>
+	<time.h>
+	<ctype.h>
+	<unistd.h>
+	<windows.h>
+	"solve2.h"
+	"gotoxy.h"
+	"init.h"
+
+1654476690 c:\users\danie\desktop\upe\2° período\lpi\c\jogo\solve2.h
+	<stdio.h>
+	<stdlib.h>
+
+1654478025 c:\users\danie\desktop\upe\2° período\lpi\c\jogo\gotoxy.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<windows.h>
+
+1654476688 c:\users\danie\desktop\upe\2° período\lpi\c\jogo\init.h
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1654477777 c:\users\danie\desktop\upe\2° período\lpi\c\jogo\canhao.h
+	<stdio.h>
+	<stdlib.h>
+	"gotoxy.h"
+
